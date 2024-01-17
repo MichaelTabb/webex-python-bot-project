@@ -4,7 +4,7 @@ from flask import Flask, request
 from common.utils import create_webhook
 from webexteamssdk import WebexTeamsAPI, Webhook
 
-WEBEX_TEAMS_ACCESS_TOKEN = '<bot-access-token>'
+WEBEX_TEAMS_ACCESS_TOKEN = 'NjRlZjdiMTYtNTRiMy00NjNhLTkzZWQtMDQ2MjFmNmQzZGNiM2VjYTkxNDgtZGZj_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
 
 teams_api = None
 all_polls = {}
