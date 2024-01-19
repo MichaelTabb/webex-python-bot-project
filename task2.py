@@ -8,6 +8,7 @@ WEBEX_TEAMS_ACCESS_TOKEN = 'YTdmZDA4YmEtMjY0MC00YjEyLWE1MGEtOTBhNzQ2MzQzMmRkYmUw
 
 teams_api = None
 all_polls = {}
+pollActive = False
 
 app = Flask(__name__)
 @app.route('/messages_webhook', methods=['POST'])
@@ -30,8 +31,8 @@ def process_message(data):
 
 def parse_message(command, sender, roomId):
     if command == "create poll":
-        if roomId not in list(all_polls.keys()):
-            create_poll(roomId, sender)
+        if pollActive == True:
+            send_message_in_room(roomId, "Error: Poll is already active. Try again when the poll is finished.")
         else:
             create_poll(roomId, sender)
     elif command == "add option":
@@ -40,9 +41,11 @@ def parse_message(command, sender, roomId):
     elif command == "start poll":
         if all_polls[roomId]:
             start_poll(roomId, sender)
+            pollActive = True
     elif command == "end poll":
         if all_polls[roomId]:
             end_poll(roomId, sender)
+    pollActive = False
     return
 
 def generate_start_poll_card(roomId):

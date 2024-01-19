@@ -9,3 +9,6 @@ elif command == "help":
                             "ping poll: pings a reminder to anybody who hasn't voted in the poll\n"
                             "status poll: Gives the satus of the poll and whether it has started and if there are any results\n"
                             "start poll: starts the poll and allows for users to vote in the poll")
+        
+
+
