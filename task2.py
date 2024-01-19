@@ -42,7 +42,8 @@ def parse_message(command, sender, roomId):
         if all_polls[roomId]:
             end_poll(roomId, sender)
     elif command == 'help':
-        send_message_in_room(roomId, "Test - Help Command")
+        if (not all_polls[roomId].created) or (all_polls[roomId]):
+            send_message_in_room(roomId, "Test - Help Command")
     return
 
 def generate_start_poll_card(roomId):
