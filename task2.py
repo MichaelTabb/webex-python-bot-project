@@ -49,8 +49,8 @@ def parse_message(command, sender, roomId):
                                  "create poll: Creates a poll to use\n"
                                  "end poll: Ends the poll and displays the results\n"
                                  "help: Gives the list of active commands that can be used\n"
-                                 "ping poll: pings a reminder to anybody who hasnt voted in the poll\n"
-                                 "status poll: Gives the satus of the poll, whether it has started and if there are any results"
+                                 "ping poll: pings a reminder to anybody who hasn't voted in the poll\n"
+                                 "status poll: Gives the satus of the poll and whether it has started and if there are any results"
                                  "start poll: starts the poll and allows for users to vote in the poll")
     return
 
