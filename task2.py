@@ -7,7 +7,7 @@ from webexteamssdk import WebexTeamsAPI, Webhook
 WEBEX_TEAMS_ACCESS_TOKEN = 'YTdmZDA4YmEtMjY0MC00YjEyLWE1MGEtOTBhNzQ2MzQzMmRkYmUwZTE4OTAtZDU2_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
 
 teams_api = None
-all_polls = []
+all_polls = {}
 
 app = Flask(__name__)
 @app.route('/messages_webhook', methods=['POST'])
@@ -31,6 +31,8 @@ def process_message(data):
 def parse_message(command, sender, roomId):
     if command == "create poll":
         if roomId not in list(all_polls.keys()):
+            create_poll(roomId, sender)
+        else:
             create_poll(roomId, sender)
     elif command == "add option":
         if all_polls[roomId]:
