@@ -45,7 +45,7 @@ def parse_message(command, sender, roomId):
     elif command == "end poll":
         if all_polls[roomId]:
             end_poll(roomId, sender)
-    pollActive = False
+            pollActive = False
     return
 
 def generate_start_poll_card(roomId):
