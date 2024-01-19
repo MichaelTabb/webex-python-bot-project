@@ -1,4 +1,5 @@
 import json
+from datetime import time, timezone, date, datetime
 from flask import Flask, request
 from common.utils import create_webhook
 from webexteamssdk import WebexTeamsAPI, Webhook
@@ -34,7 +35,7 @@ def timer():
 def timezone():
     return
 
-def generate_add_event_card():
+def generate_add_event_card(data):
     return {
     "type": "AdaptiveCard",
     "body": [
@@ -86,7 +87,7 @@ def generate_reminder_card():
     return
 
 def create_event():
-    return
+    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
 
 def view_events():
     return
@@ -106,7 +107,26 @@ def commands(command, sender, roomId):
     elif command == "help":
         send_message_in_room(roomId, "These are the commands that you can use:\n")
 
-        
+@app.route('/attachmentActions_webhook', methods=['POST'])
+def attachmentActions_webhook():
+    if request.method == 'POST':
+        print("attachmentActions POST!")
+        webhook_obj = Webhook(request.json)
+        return process_card_response(webhook_obj.data)
+
+def process_card_response(data):
+    attachment = (teams_api.attachment_actions.get(data.id)).json_data
+    inputs = attachment['inputs']
+    if 'event_name' in list(inputs.keys()):
+        add_event(inputs['event_name'], inputs['event_date'], inputs['event_time'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
+        send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['reminder_name'])
+    return '200'
+
+def add_event(event_name, event_date, event_time, room_id, author):
+    print(author)
+    poll = Poll(poll_name, poll_description, room_id, author)
+    all_polls[room_id] = poll
+
 
 if __name__ == '__main__':
     teams_api = WebexTeamsAPI(access_token=WEBEX_TEAMS_ACCESS_TOKEN)
