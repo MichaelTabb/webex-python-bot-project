@@ -31,10 +31,10 @@ def process_message(data):
 def commands(command, sender, roomId):
     if command == "create event":
         if all_events[roomId]:
-            create_poll(roomId, sender)
+            create_event(roomId, sender)
     elif command == "view events":
         if all_events[roomId]:
-            add_option(roomId, sender)
+            view_events(roomId, sender)
     
 def timer(event_Time):
     timeNow = datetime.now()
