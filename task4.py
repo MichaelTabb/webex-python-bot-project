@@ -92,7 +92,7 @@ def generate_add_event_card(roomId):
 def generate_reminder_card():
     return
 
-def create_event():
+def create_event(sender, roomId):
     teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
 
 def view_events():
