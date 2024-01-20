@@ -29,10 +29,9 @@ def process_message(data):
         return '200'
 
     
-def timer():
-    return
-
-def timezone():
+def timer(event_Time):
+    timeNow = datetime.now()
+    
     return
 
 def generate_add_event_card(data):
