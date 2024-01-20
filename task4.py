@@ -31,7 +31,7 @@ def process_message(data):
 def parse_message(command, sender, roomId):
     if command == "create event":
             if all_events[roomId]:
-                create_event(roomId)
+                create_event(roomId, sender)
     elif command == "view events":
         if all_events[roomId]:
             view_events(roomId, sender)
@@ -93,7 +93,7 @@ def generate_reminder_card():
     return
 
 def create_event(roomId, sender):
-    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId, all_events)])
+    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
 
 def view_events():
     return
