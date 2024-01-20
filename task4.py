@@ -25,12 +25,12 @@ def process_message(data):
         print(message)
         commands_split = (message.split())[1:]
         command = ' '.join(commands_split)
-        commands(command, data.personEmail, data.roomId)
+        parse_message(command, data.personEmail, data.roomId)
         return '200'
 
-def commands(command, sender, roomId):
+def parse_message(command, sender, roomId):
     if command == "create event":
-        if all_events[roomId]:
+        
             create_event(roomId, sender)
     elif command == "view events":
         if all_events[roomId]:
@@ -93,7 +93,7 @@ def generate_reminder_card():
     return
 
 def create_event(roomId, sender):
-    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
+    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId, all_events)])
 
 def view_events():
     return
@@ -120,10 +120,10 @@ def process_card_response(data):
         send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['reminder_name'])
     return '200'
 
-def add_event(event_name, event_date, event_time, room_id, author):
+def add_event(event_Name, event_Date, event_Time, room_id, author):
     print(author)
-    poll = Poll(poll_name, poll_description, room_id, author)
-    all_polls[room_id] = poll
+    event = [event_Name, event_Date, event_Time, room_id, author]
+    all_events[room_id] = event
 
 
 if __name__ == '__main__':
