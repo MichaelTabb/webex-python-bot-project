@@ -4,7 +4,7 @@ from flask import Flask, request
 from common.utils import create_webhook
 from webexteamssdk import WebexTeamsAPI, Webhook
 
-WEBEX_TEAMS_ACCESS_TOKEN = 'YTZjNDJiYWYtZWVjZS00ZjM4LTk2NzItZmQwNzBlM2M1NGU0MTIwZDhhZTMtNWIx_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
+WEBEX_TEAMS_ACCESS_TOKEN = 'NGQ0NGJjZTMtYzQyNC00NTU1LWE4ZGUtNmI3YzU5YjU1MDdhZmFkMDE2M2UtZTU3_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
 
 teams_api = None
 allEvents = {}
@@ -34,7 +34,7 @@ def timer(event_Time):
     
     return
 
-def generate_add_event_card(data):
+def generate_add_event_card(roomId):
     return {
     "type": "AdaptiveCard",
     "body": [
@@ -117,7 +117,7 @@ def process_card_response(data):
     attachment = (teams_api.attachment_actions.get(data.id)).json_data
     inputs = attachment['inputs']
     if 'event_name' in list(inputs.keys()):
-        add_event(inputs['event_name'], inputs['event_date'], inputs['event_time'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
+        add_event(inputs['event_Name'], inputs['event_Date'], inputs['event_Time'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
         send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['reminder_name'])
     return '200'
 
