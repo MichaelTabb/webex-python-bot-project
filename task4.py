@@ -117,7 +117,7 @@ def process_card_response(data):
     inputs = attachment['inputs']
     if 'event_name' in list(inputs.keys()):
         add_event(inputs['event_Name'], inputs['event_Date'], inputs['event_Time'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
-        send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['reminder_name'])
+        send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['event_Name'])
     return '200'
 
 def add_event(event_Name, event_Date, event_Time, room_id, author):
