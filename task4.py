@@ -31,7 +31,7 @@ def process_message(data):
 def parse_message(command, sender, roomId):
     if command == "create event":
             if all_events[roomId]:
-                create_event(roomId, sender)
+                create_event(roomId)
     elif command == "view events":
         if all_events[roomId]:
             view_events(roomId, sender)
