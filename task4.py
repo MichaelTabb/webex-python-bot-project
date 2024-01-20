@@ -41,7 +41,7 @@ def timer(event_Time):
     
     return
 
-def generate_add_event_card(roomId, sender):
+def generate_add_event_card(roomId):
     return {
     "type": "AdaptiveCard",
     "body": [
