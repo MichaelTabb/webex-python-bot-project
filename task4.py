@@ -7,7 +7,7 @@ from webexteamssdk import WebexTeamsAPI, Webhook
 WEBEX_TEAMS_ACCESS_TOKEN = 'NGQ0NGJjZTMtYzQyNC00NTU1LWE4ZGUtNmI3YzU5YjU1MDdhZmFkMDE2M2UtZTU3_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
 
 teams_api = None
-allEvents = {}
+all_events = {}
 
 app = Flask(__name__)
 @app.route('/messages_webhook', methods=['POST'])
@@ -28,6 +28,13 @@ def process_message(data):
         commands(command, data.personEmail, data.roomId)
         return '200'
 
+def commands(command, sender, roomId):
+    if command == "create event":
+        if all_events[roomId]:
+            create_poll(roomId, sender)
+    elif command == "view events":
+        if all_events[roomId]:
+            add_option(roomId, sender)
     
 def timer(event_Time):
     timeNow = datetime.now()
@@ -97,14 +104,6 @@ def send_direct_message(person_email, message):
 def send_message_in_room(room_id, message):
     teams_api.messages.create(roomId=room_id, text=message)
 
-
-def commands(command, sender, roomId):
-    if command == "create event":
-        create_event(roomId, sender)
-    elif command == "view events":
-        view_events(roomId, sender)
-    elif command == "help":
-        send_message_in_room(roomId, "These are the commands that you can use:\n")
 
 @app.route('/attachmentActions_webhook', methods=['POST'])
 def attachmentActions_webhook():
