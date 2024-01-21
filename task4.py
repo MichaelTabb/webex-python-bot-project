@@ -4,7 +4,7 @@ from flask import Flask, request
 from common.utils import create_webhook
 from webexteamssdk import WebexTeamsAPI, Webhook
 
-WEBEX_TEAMS_ACCESS_TOKEN = 'NGQ0NGJjZTMtYzQyNC00NTU1LWE4ZGUtNmI3YzU5YjU1MDdhZmFkMDE2M2UtZTU3_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
+WEBEX_TEAMS_ACCESS_TOKEN = 'NzdiNmRhMjEtMzJmOS00NGI2LWFlN2YtOTI4YTU3YjZjNTc5MDFlOGY0ZGItNmQ4_P0A1_19365916-598f-457d-9ca7-51a422c8769e'
 
 teams_api = None
 all_events = {}
