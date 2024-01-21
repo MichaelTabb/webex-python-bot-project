@@ -1,5 +1,5 @@
 import json
-from datetime import time, timezone, date, datetime
+from datetime import time, datetime
 from flask import Flask, request
 from common.utils import create_webhook
 from webexteamssdk import WebexTeamsAPI, Webhook
@@ -36,57 +36,75 @@ def parse_message(command, sender, roomId):
         if all_events[roomId]:
             view_events(roomId, sender)
     
-def timer(event_Time):
-    timeNow = datetime.now()
-    
+def timer(time_Hours, time_Minutes, time_Seconds):
+    total_seconds = time_Hours * 3600 + time_Minutes * 60 + time_Seconds
+    while total_seconds > 0:
+        timer = datetime.timedelta(seconds = total_seconds)
+        time.sleep(1)
+        total_seconds -= 1
     return
 
 def generate_add_event_card(roomId):
     return {
     "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.3",
     "body": [
         {
             "type": "TextBlock",
-            "text": "Enter name of event",
+            "text": "Create a Reminder",
+            "wrap": True,
+            "size": "Large"
+        },
+        {
+            "type": "TextBlock",
+            "text": "What is the name of the event?",
             "wrap": True
         },
         {
             "type": "Input.Text",
-            "placeholder": "Event name",
+            "placeholder": "Event Name",
             "id": "event_Name"
         },
         {
             "type": "TextBlock",
-            "text": "Enter date of event",
+            "text": "How long till the event?",
             "wrap": True
         },
         {
-            "type": "Input.Date",
-            "id": "event_Date"
+            "type": "Input.Text",
+            "placeholder": "Hours",
+            "id": "time_Hours",
+            "isRequired": True,
+            "label": "Enter an Integer Number",
+            "errorMessage": "Not an integer number"
         },
         {
-            "type": "TextBlock",
-            "text": "Enter time of event",
-            "wrap": True
+            "type": "Input.Text",
+            "placeholder": "Minutes",
+            "id": "time_Minutes",
+            "isRequired": True,
+            "label": "Enter an Integer Number",
+            "errorMessage": "Not an integer number"
         },
         {
-            "type": "Input.Time",
-            "id": "event_Time"
+            "type": "Input.Text",
+            "placeholder": "Seconds",
+            "id": "time_Seconds",
+            "label": "Enter an Integer Number",
+            "errorMessage": "Not an integer number",
+            "isRequired": True
         },
         {
             "type": "ActionSet",
-            "horizontalAlignment": "Left",
-            "spacing": "None",
             "actions": [
                 {
                     "type": "Action.Submit",
-                    "title": "Enter event"
+                    "title": "Submit"
                 }
             ]
         }
-    ],
-    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-    "version": "1.3"
+    ]
 }
 
 def generate_reminder_card():
@@ -116,13 +134,13 @@ def process_card_response(data):
     attachment = (teams_api.attachment_actions.get(data.id)).json_data
     inputs = attachment['inputs']
     if 'event_name' in list(inputs.keys()):
-        add_event(inputs['event_Name'], inputs['event_Date'], inputs['event_Time'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
+        add_event(inputs['event_Name'], inputs['time_Hours'], inputs['time_Minutes'], ['time_Seconds'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
         send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['event_Name'])
     return '200'
 
-def add_event(event_Name, event_Date, event_Time, room_id, author):
+def add_event(event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author):
     print(author)
-    event = [event_Name, event_Date, event_Time, room_id, author]
+    event = [event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author]
     all_events[room_id] = event
 
 
