@@ -11,9 +11,9 @@ teams_api = None
 all_events = {}
 
 app = Flask(__name__)
-@app.route('/messages_webhook', methods=['POST'])
+@app.route('/messages_webhook', methods=['GET'])
 def messages_webhook():
-    if request.method == 'POST':
+    if request.method == 'GET':
         webhook_obj = Webhook(request.json)
         return process_message(webhook_obj.data)
     
