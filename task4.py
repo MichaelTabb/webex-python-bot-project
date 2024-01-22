@@ -132,10 +132,10 @@ def send_message_in_room(room_id, message):
     teams_api.messages.create(roomId=room_id, text=message)
 
 
-@app.route('/attachmentActions_webhook', methods=['POST'])
+@app.route('/attachmentActions_webhook', methods=['GET'])
 def attachmentActions_webhook():
-    if request.method == 'POST':
-        print("attachmentActions POST!")
+    if request.method == 'GET':
+        print("attachmentActions GET!")
         webhook_obj = Webhook(request.json)
         return process_card_response(webhook_obj.data)
 
