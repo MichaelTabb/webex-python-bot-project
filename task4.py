@@ -114,31 +114,7 @@ def generate_add_event_card(roomId):
 }
 
 def generate_reminder_card(roomId):
-    card_results = {
-        "contentType": "application/vnd.microsoft.card.adaptive",
-        "content": {
-            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-            "type": "AdaptiveCard",
-            "version": "1.1",
-            "body": [
-                {
-                    "type": "TextBlock",
-                    "text": "Reminder:",
-                    "size": "large"
-                },
-                {
-                    "type": "Input.Text",
-                    "id": "roomId",
-                    "value": roomId,
-                    "isVisible": False
-                }
-            ],
-            "actions": []
-        }
-    }
-    for event in all_events:
-        print(all_events)
-    return card_results
+    return
 
 def create_event(roomId, sender):
     teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
