@@ -173,7 +173,7 @@ def process_card_response(data):
 
 def add_event(event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author):
     print(author)
-    event = Poll(event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author)
+    event = (event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author)
     all_events[room_id] = event
 
 
