@@ -1,4 +1,5 @@
 import json
+from common.poll import Poll
 from datetime import time, datetime
 from flask import Flask, request
 from common.utils import create_webhook
@@ -37,7 +38,7 @@ def parse_message(command, sender, roomId):
             view_events(roomId, sender)
     
 def timer(time_Hours, time_Minutes, time_Seconds):
-    total_seconds = time_Hours * 3600 + time_Minutes * 60 + time_Seconds
+    total_seconds = int(time_Hours) * 3600 + int(time_Minutes) * 60 + int(time_Seconds)
     while total_seconds > 0:
         timer = datetime.timedelta(seconds = total_seconds)
         time.sleep(1)
@@ -96,6 +97,12 @@ def generate_add_event_card(roomId):
             "isRequired": True
         },
         {
+            "type": "Input.Text",
+            "id": "roomId",
+            "value": roomId,
+            "isVisible": False
+        },
+        {
             "type": "ActionSet",
             "actions": [
                 {
@@ -107,11 +114,38 @@ def generate_add_event_card(roomId):
     ]
 }
 
-def generate_reminder_card():
-    return
+def generate_reminder_card(roomId):
+    card_results = {
+        "contentType": "application/vnd.microsoft.card.adaptive",
+        "content": {
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "type": "AdaptiveCard",
+            "version": "1.1",
+            "body": [
+                {
+                    "type": "TextBlock",
+                    "text": "Reminder:",
+                    "size": "large"
+                },
+                {
+                    "type": "Input.Text",
+                    "id": "roomId",
+                    "value": roomId,
+                    "isVisible": False
+                }
+            ],
+            "actions": []
+        }
+    }
+    for event in all_events:
+        print(all_events)
+    return card_results
 
 def create_event(roomId, sender):
     teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_add_event_card(roomId)])
+
+def send_reminder(roomId, sender, timer):
+    teams_api.messages.create(toPersonEmail=sender, text="Cards Unsupported", attachments=[generate_reminder_card(roomId)])
 
 def view_events():
     return
@@ -133,14 +167,14 @@ def attachmentActions_webhook():
 def process_card_response(data):
     attachment = (teams_api.attachment_actions.get(data.id)).json_data
     inputs = attachment['inputs']
-    if 'event_name' in list(inputs.keys()):
-        add_event(inputs['event_Name'], inputs['time_Hours'], inputs['time_Minutes'], ['time_Seconds'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
+    if 'event_Name' in list(inputs.keys()):
+        add_event(inputs['event_Name'], inputs['time_Hours'], inputs['time_Minutes'], inputs['time_Seconds'], inputs['roomId'], teams_api.people.get(data.personId).emails[0])
         send_message_in_room(inputs['roomId'], "Reminder created with title: " + inputs['event_Name'])
     return '200'
 
 def add_event(event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author):
     print(author)
-    event = [event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author]
+    event = Poll(event_Name, time_Hours, time_Minutes, time_Seconds, room_id, author)
     all_events[room_id] = event
 
 
